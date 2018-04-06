@@ -67,7 +67,7 @@ class Regression_Layer(caffe.Layer):
 		if len(bottom) != 3:
 		    raise Exception("Need 3 Inputs")
     def reshape(self,bottom,top):
-		if bottom[0].count != bottom[1].count or bottom[2].count *2 != bottom[0].count || bottom[2].count *2 != bottom[1].count :
+		if bottom[0].count != bottom[1].count or bottom[2].count != bottom[0].count or bottom[2].count != bottom[1].count :
 		    raise Exception("Input predict and groundTruth should have same dimension")
 		pointClass = bottom[2].data
 		self.valid_index_x = np.where(pointClass != -1)[0]
@@ -121,7 +121,7 @@ class Test_Layer_Loss(caffe.Layer):
 		if len(bottom) != 3:
 		    raise Exception("Need 3 Inputs")
     def reshape(self,bottom,top):
-		if bottom[0].count != bottom[1].count or bottom[2].count *2 != bottom[0].count || bottom[2].count *2 != bottom[1].count :
+		if bottom[0].count != bottom[1].count or bottom[2].count != bottom[0].count || bottom[2].count != bottom[1].count :
 		    raise Exception("Input predict and groundTruth should have same dimension")
 		pointClass = bottom[2].data
 		self.valid_index_x = np.where(pointClass != -1)[0]
