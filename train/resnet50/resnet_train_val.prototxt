@@ -2567,26 +2567,26 @@ layer {
 
 layer {
 	bottom: "pool5"
-	top: "fc2"
-	name: "fc2"
+	top: "fc3"
+	name: "fc3"
 	type: "InnerProduct"
 	inner_product_param {
-		num_output: 2
+		num_output: 3
 	}
 }
 layer{
 	bottom: "pool5"
-	top: "fc26"
-    name: "fc26"
+	top: "fc48"
+    name: "fc48"
     type: "InnerProduct"
     inner_product_param{
-    	num_output: 26
+    	num_output: 48
     }
 }
 layer {
 	name: "accuracyTrain"
 	type: "Accuracy"
-	bottom: "fc2"
+	bottom: "fc3"
 	bottom: "label"
 	top: "accuracyTrain"
 	include{
@@ -2596,7 +2596,7 @@ layer {
 layer {
 	name: "accuracyTest"
 	type: "Accuracy"
-	bottom: "fc2"
+	bottom: "fc3"
 	bottom: "label"
 	top: "accuracyTest"
 	include{ 
@@ -2607,7 +2607,7 @@ layer
 {
 	name:"classLoss"
 	type:"SoftmaxWithLoss"
-	bottom: "fc2"
+	bottom: "fc3"
 	bottom:"label"
 	top:"classLoss"
 	propagate_down: 1
@@ -2617,7 +2617,7 @@ layer
 {
 	name: "LandmarkLoss"
 	type: "Python"
-	bottom: "fc26"
+	bottom: "fc48"
 	bottom: "reg"
 	bottom: "label"
 	top: "LandmarkLoss"
@@ -2634,7 +2634,7 @@ layer
 {
 	name: "testLandmarkLoss"
     type: "Python"
-    bottom: "fc26"
+    bottom: "fc48"
     bottom: "reg"
 	bottom: "label"
 	top: "testLandmarkLoss"
