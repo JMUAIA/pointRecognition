@@ -2566,13 +2566,30 @@ layer {
 }
 
 layer {
-	bottom: "pool5"
-	top: "fc3"
-	name: "fc3"
-	type: "InnerProduct"
-	inner_product_param {
-		num_output: 3
-	}
+  name: "class-conv"
+  type: "Convolution"
+  bottom: "pool5"
+  top: "class-conv"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 3
+    kernel_size: 1
+    stride: 1
+     weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
 }
 layer{
 	bottom: "pool5"
@@ -2582,36 +2599,6 @@ layer{
     inner_product_param{
     	num_output: 48
     }
-}
-layer {
-	name: "accuracyTrain"
-	type: "Accuracy"
-	bottom: "fc3"
-	bottom: "label"
-	top: "accuracyTrain"
-	include{
-	 	phase: TRAIN
-	}
-}
-layer {
-	name: "accuracyTest"
-	type: "Accuracy"
-	bottom: "fc3"
-	bottom: "label"
-	top: "accuracyTest"
-	include{ 
-		phase: TEST 
-	}
-}
-layer
-{
-	name:"classLoss"
-	type:"SoftmaxWithLoss"
-	bottom: "fc3"
-	bottom:"label"
-	top:"classLoss"
-	propagate_down: 1
-	propagate_down: 0
 }
 layer
 {
