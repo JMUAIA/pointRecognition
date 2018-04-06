@@ -1,4 +1,4 @@
-net:"models/resnet50/train_val.prototxt"
+net:"train_val.prototxt"
 test_iter:30
 
 test_interval: 500
@@ -23,7 +23,7 @@ max_iter: 10000
 
 snapshot: 2000
 
-snapshot_prefix:"models/resnetWeight/"
+snapshot_prefix:"model/"
 
 solver_mode: GPU
 
