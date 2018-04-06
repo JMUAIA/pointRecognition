@@ -37,26 +37,32 @@ def takeImage(i,category,Imagelist,data):
 	img = cv.resize(img_0,(width,length))#获得指定大小的图像
 	img_d=cv.flip(img, 1)
 	temp=[]
-	temp_d=[]
+	# temp_d=[]
 	temp.append(img)
-	temp_d.append(img_d) #添加图像翻转
+	# temp_d.append(img_d) #添加图像翻转
+	keyPoint=[]
+	keyVisual=[]
 	start=2#跳过图片的地址和类别
 	for j in range(len(data.ix[i])-2):
 		point = data.ix[i,start].split('_',2)
 		x=int(point[0])*width/img_1.shape[1]
 		y=int(point[1])*length/img_1.shape[0]
 		visual=int(point[2])
-		temp.append([x,y,visual])
-		temp_d.append([width-x,y,visual])
+		keyPoint.append(x)
+		keyPoint.append(y)
+		keyVisual.append(visual)
+		keyVisual.append(visual)
 		start=start+1
+	temp.append(keyPoint)
+	temp.append(keyVisual)
 	Imagelist.append(temp)#分别写入同一张图片以及它的镜像的数据，在后面会对所有数据进行打乱
-	Imagelist.append(temp_d)
+	# Imagelist.append(temp_d)
 
 def makeList(annotations): #将指定annotations文件的数据生成IMDB
 	fp = open(annotations,'r')
 	data = pd.read_csv(fp)
 	sum_ = len(data)#确定要写入前几张图片的数据
-	for i in range(100):
+	for i in range(3):
 		takeImage(i,'blouse',blouse_list,data)
 		takeImage(i,'dress',dress_list,data)
 		takeImage(i,'outwear',outwear_list,data)
