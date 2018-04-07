@@ -6,9 +6,8 @@ import numpy as np
 import random
 import cPickle as pickle
 imdb_exit = True
-#####修改参数#####
 clothes_class = 'blouse' 
-point_number = 24  #点个数
+point_number = 24  
 trainImdb = '../data/IMDB/' + clothes_class+ ('/%s_train.imdb'%clothes_class)
 testImdb = '../data/IMDB/' + clothes_class+ ('/%s_test.imdb'%clothes_class)
 #########################################################################
@@ -38,7 +37,7 @@ class Data_Layer_Train(caffe.Layer):
 class BatchLoader(object):
     def __init__(self, fileName, net_side):
         self.data_list = []
-        self.mean = np.array([100,100,100]).reshape(1,1,3) #平均值
+        self.mean = np.array([100,100,100]).reshape(1,3,1,1) 
         self.count = 0 
         self.image_size = net_side    
         print "start Reading Classify into memory ..."
@@ -54,8 +53,6 @@ class BatchLoader(object):
         count_data = self.data_list[self.count]
 
         img = np.array(count_data[0], dtype= float)
-        #add 
-        img = np.swapaxes(img, 0, 2)
         img = img - self.mean
         reg = np.array(count_data[1], dtype = float) / self.image_size
         valid_value = np.array(count_data[2], dtype = int)            
@@ -73,7 +70,7 @@ class Regression_Layer(caffe.Layer):
 		if bottom[0].count != bottom[1].count or bottom[2].count != bottom[0].count or bottom[2].count != bottom[1].count :
 		    raise Exception("Input predict and groundTruth should have same dimension")
 		pointClass = bottom[2].data
-		self.valid_index = np.where(pointClass != -1)[0]
+		self.valid_index = np.where(pointClass == -1)[0]
 	    self.diff = np.zeros_like(bottom[0].data, dtype=np.float32)
 	    top[0].reshape(1)
 
@@ -101,7 +98,7 @@ class Regression_Layer(caffe.Layer):
 class Data_Layer_Test(caffe.Layer):
     def setup(self, bottom, top):
         self.batch_size = 128
-	    net_side = 224  #输入网络大小
+	    net_side = 224 
         self.batch_loader = BatchLoader(testImdb, net_side)
         top[0].reshape(self.batch_size, 3, net_side, net_side)
         top[1].reshape(self.batch_size,point_number*2)
@@ -125,7 +122,7 @@ class Test_Layer_Loss(caffe.Layer):
 		if bottom[0].count != bottom[1].count or bottom[2].count != bottom[0].count || bottom[2].count != bottom[1].count :
 		    raise Exception("Input predict and groundTruth should have same dimension")
 		pointClass = bottom[2].data
-	    self.valid_index = np.where(pointClass != -1)[0]
+	    self.valid_index = np.where(pointClass == -1)[0]
 	    self.diff = np.zeros_like(bottom[0].data, dtype=np.float32)
 	    top[0].reshape(1)
 
